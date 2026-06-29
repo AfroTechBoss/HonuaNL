@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report a problem · honua</title>
+<link rel="stylesheet" href="../src/styles.css">
+<link rel="stylesheet" href="support.css">
+</head>
+<body>
+
+<header class="sup-header">
+  <a class="sup-logo" href="../pages/Honua - Start here.html">
+    <span class="mark">h</span><span class="wm">honua</span><span class="tag">help</span>
+  </a>
+  <nav class="sup-nav">
+    <a href="Help Center.html">Help center</a>
+    <a href="Community Guidelines.html" class="hide-sm">Guidelines</a>
+    <a href="Contact Support.html" class="hide-sm">Contact</a>
+    <a href="Terms &amp; Privacy.html" class="hide-sm">Terms &amp; privacy</a>
+    <a class="sup-back" href="../pages/Desktop Prototype.html">← Back to app</a>
+  </nav>
+</header>
+
+<main class="sup-wrap">
+  <section class="hero">
+    <p class="eyebrow">Report a problem</p>
+    <h1>Tell us what’s wrong.</h1>
+    <p class="lede">Flag content that breaks our guidelines, a safety concern, or a bug. Reports are confidential and reviewed by our team.</p>
+  </section>
+
+  <div class="cols">
+    <div class="panel">
+      <form id="reportForm">
+        <div class="field">
+          <label>What are you reporting?</label>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="kind" value="post" checked><span><span class="ct">A post or comment</span><span class="cs">Harmful, misleading, or spam</span></span></label>
+            <label class="choice"><input type="radio" name="kind" value="person"><span><span class="ct">A person or profile</span><span class="cs">Harassment or impersonation</span></span></label>
+            <label class="choice"><input type="radio" name="kind" value="impact"><span><span class="ct">A false impact claim</span><span class="cs">Unverifiable or fabricated figures</span></span></label>
+            <label class="choice"><input type="radio" name="kind" value="bug"><span><span class="ct">A bug</span><span class="cs">Something isn’t working</span></span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="link">Link or @username <span class="hint">— optional, helps us find it</span></label>
+          <input class="inp" id="link" type="text" placeholder="honua.green/p/1287  or  @username">
+        </div>
+
+        <div class="field">
+          <label for="severity">How urgent is this?</label>
+          <select class="sel" id="severity">
+            <option>Low — when you get a chance</option>
+            <option selected>Medium — needs a look</option>
+            <option>High — someone could be harmed</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="details">Details</label>
+          <textarea class="ta" id="details" placeholder="What happened, and what guideline or expectation does it break?" required></textarea>
+        </div>
+
+        <button class="submit clay" type="submit">
+          <svg class="ic sm" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          Submit report
+        </button>
+      </form>
+      <div class="success" id="ok">
+        <div class="ring"><svg class="ic" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></div>
+        <h3>Report received</h3>
+        <p>Thank you for helping keep Honua trustworthy. Our team will review this confidentially — you’ll get a confirmation by email. (This is a prototype, so nothing was actually submitted.)</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="aside-card">
+        <h3>What happens next</h3>
+        <div class="steps" style="margin-top:8px;gap:10px">
+          <div class="step" style="padding:14px 16px"><span class="n"></span><div><h3>We review it</h3><p>A moderator checks the report against our guidelines.</p></div></div>
+          <div class="step" style="padding:14px 16px"><span class="n"></span><div><h3>We act</h3><p>Content may be removed and the account warned or limited.</p></div></div>
+          <div class="step" style="padding:14px 16px"><span class="n"></span><div><h3>We follow up</h3><p>You get a confirmation email; we keep your identity private.</p></div></div>
+        </div>
+      </div>
+      <div class="note warn">
+        <span class="ni"><svg class="ic" viewBox="0 0 24 24" style="color:var(--clay)"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+        <div><strong>In an emergency,</strong> if someone is in immediate danger, contact your local emergency services first — don’t wait on a report.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="sup-footer">
+  <div class="inner">
+    <div class="foot-links">
+      <a href="Help Center.html">Help center</a>
+      <a href="Contact Support.html">Contact support</a>
+      <a href="Community Guidelines.html">Community guidelines</a>
+      <a href="Report a Problem.html">Report a problem</a>
+      <a href="Terms &amp; Privacy.html">Terms &amp; privacy</a>
+    </div>
+    <div class="foot-meta">© 2026 honua coop</div>
+  </div>
+</footer>
+
+<script>
+  // highlight selected choice + clay tint for the "bug"/severe options visually
+  const form = document.getElementById('reportForm');
+  function sync() {
+    form.querySelectorAll('.choice').forEach(c => {
+      const r = c.querySelector('input');
+      c.classList.toggle('checked', r.checked);
+    });
+  }
+  form.querySelectorAll('input[name=kind]').forEach(r => r.addEventListener('change', sync));
+  sync();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!this.checkValidity()) { this.reportValidity(); return; }
+    this.style.display = 'none';
+    document.getElementById('ok').classList.add('show');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help center · honua</title>
+<link rel="stylesheet" href="../src/styles.css">
+<link rel="stylesheet" href="support.css">
+<style>
+  /* ---- Help center · page-specific ---- */
+  .hc-hero {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #1f6f3f 0%, #2e9a5b 58%, #3fae6b 100%);
+    color: #fff; border-radius: 28px;
+    padding: clamp(36px, 5vw, 64px) clamp(28px, 5vw, 60px) clamp(40px, 5vw, 60px);
+    margin-top: 8px;
+  }
+  .hc-hero svg.bg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .5; }
+  .hc-hero .inner { position: relative; max-width: 640px; }
+  .hc-hero .eyebrow { color: rgba(255,255,255,.85); }
+  .hc-hero h1 { font-family: 'Bricolage Grotesque'; font-weight: 600; letter-spacing: -0.035em; font-size: clamp(34px, 5.4vw, 56px); line-height: 1.02; margin: 12px 0 0; }
+  .hc-search { margin-top: 26px; display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 14px; padding: 5px 6px 5px 16px; max-width: 560px; box-shadow: 0 16px 40px -18px rgba(0,0,0,.4); }
+  .hc-search svg { color: var(--ink-4); }
+  .hc-search input { flex: 1; border: none; outline: none; background: transparent; font-size: 15.5px; font-family: 'Geist'; padding: 13px 0; color: var(--ink); }
+  .hc-search button { border: none; cursor: pointer; background: var(--ink); color: #fff; font-weight: 500; font-size: 14px; padding: 12px 20px; border-radius: 10px; }
+  .hc-search button:hover { background: var(--green-2); }
+  .hc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .hc-chips a { text-decoration: none; font-size: 13px; color: #fff; background: rgba(255,255,255,.16); padding: 7px 13px; border-radius: 999px; font-family: 'Geist Mono'; }
+  .hc-chips a:hover { background: rgba(255,255,255,.28); }
+
+  /* guided paths */
+  .paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  @media (max-width: 760px) { .paths { grid-template-columns: 1fr; } .hc-search { max-width: none; } }
+  .path { position: relative; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px; overflow: hidden; transition: transform .16s, box-shadow .16s, border-color .16s; }
+  .path:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -26px rgba(0,0,0,.3); border-color: var(--line-2); }
+  .path .step { font-family: 'Geist Mono'; font-size: 11px; letter-spacing: .08em; color: var(--green); }
+  .path h3 { font-family: 'Bricolage Grotesque'; font-weight: 600; font-size: 21px; letter-spacing: -0.02em; margin: 14px 0 6px; }
+  .path p { font-size: 13.5px; line-height: 1.55; color: var(--ink-3); margin: 0 0 16px; }
+  .path .go { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--green); }
+  .path .ring { position: absolute; right: -34px; top: -34px; width: 110px; height: 110px; border-radius: 50%; background: var(--green-tint); }
+
+  /* accordion */
+  .acc { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); margin-top: 22px; }
+  .acc details { border-top: 1px solid var(--line); }
+  .acc details:first-child { border-top: none; }
+  .acc summary { list-style: none; cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 14px; font-size: 15.5px; font-weight: 500; }
+  .acc summary::-webkit-details-marker { display: none; }
+  .acc summary .q { flex: 1; }
+  .acc summary .ch { color: var(--ink-4); transition: transform .2s; flex-shrink: 0; }
+  .acc details[open] summary .ch { transform: rotate(90deg); color: var(--green); }
+  .acc .a { padding: 0 20px 18px 54px; font-size: 14.5px; line-height: 1.65; color: var(--ink-3); }
+  .acc .a a { color: var(--green); font-weight: 600; text-decoration: none; }
+
+  .mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+  @media (max-width: 620px) { .mini-row { grid-template-columns: 1fr; } }
+  .mini { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; transition: border-color .16s, transform .16s; }
+  .mini:hover { border-color: var(--line-2); transform: translateY(-2px); }
+  .mini .mic { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+  .mini h3 { font-family: 'Bricolage Grotesque'; font-weight: 600; font-size: 17px; margin: 0 0 3px; }
+  .mini p { font-size: 13px; color: var(--ink-3); margin: 0; }
+</style>
+</head>
+<body>
+
+<header class="sup-header">
+  <a class="sup-logo" href="../pages/Honua - Start here.html">
+    <span class="mark">h</span><span class="wm">honua</span><span class="tag">help</span>
+  </a>
+  <nav class="sup-nav">
+    <a href="Help Center.html" class="active">Help center</a>
+    <a href="Community Guidelines.html" class="hide-sm">Guidelines</a>
+    <a href="Contact Support.html" class="hide-sm">Contact</a>
+    <a href="Terms &amp; Privacy.html" class="hide-sm">Terms &amp; privacy</a>
+    <a class="sup-back" href="../pages/Desktop Prototype.html">← Back to app</a>
+  </nav>
+</header>
+
+<main class="sup-wrap">
+  <!-- HERO -->
+  <section class="hc-hero">
+    <svg class="bg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
+      <path d="M0 250 Q300 180 600 240 T1200 210 L1200 400 0 400Z" fill="rgba(255,255,255,.07)"/>
+      <path d="M0 310 Q300 250 600 300 T1200 270 L1200 400 0 400Z" fill="rgba(255,255,255,.09)"/>
+      <circle cx="1010" cy="90" r="70" fill="rgba(255,255,255,.10)"/>
+    </svg>
+    <div class="inner">
+      <p class="eyebrow">Help center</p>
+      <h1>What can we help you with?</h1>
+      <form class="hc-search" onsubmit="return false">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input type="text" placeholder="Search for answers — e.g. “verify my impact”" aria-label="Search help articles">
+        <button type="submit">Search</button>
+      </form>
+      <div class="hc-chips">
+        <a href="#faq">Reset password</a>
+        <a href="#faq">Impact score</a>
+        <a href="#faq">Green Points</a>
+        <a href="#faq">Carbon credits</a>
+        <a href="#faq">Notifications</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDED PATHS -->
+  <h2 class="sec">Start here</h2>
+  <div class="paths">
+    <a class="path" href="#faq">
+      <div class="ring"></div>
+      <div class="step">FIRST 5 MINUTES</div>
+      <h3>New to Honua</h3>
+      <p>Set up your profile, shape your feed, and make your first post.</p>
+      <span class="go">Get started →</span>
+    </a>
+    <a class="path" href="#faq">
+      <div class="ring"></div>
+      <div class="step">THE CORE IDEA</div>
+      <h3>Verify your impact</h3>
+      <p>How actions become oracle-verified and lift your impact score.</p>
+      <span class="go">Learn how →</span>
+    </a>
+    <a class="path" href="#faq">
+      <div class="ring"></div>
+      <div class="step">OFFSET THE REST</div>
+      <h3>Buy carbon credits</h3>
+      <p>Purchase traceable, audited credits in the carbon market.</p>
+      <span class="go">Walk me through →</span>
+    </a>
+  </div>
+
+  <!-- BROWSE TOPICS -->
+  <h2 class="sec">Browse every topic</h2>
+  <div class="card-grid">
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--green-tint);color:var(--green)"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg></div>
+      <h3>Getting started</h3>
+      <p>Accounts, onboarding, and setting up your profile.</p>
+      <span class="count">8 articles</span>
+    </a>
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--green-tint);color:var(--green)"><svg class="ic" viewBox="0 0 24 24"><path d="M21 3c0 9-7 14-12 14-2 0-4-1-5-2 0-9 6-14 12-14 2 0 4 1 5 2z"/><path d="M4 21c2-7 5-10 12-12"/></svg></div>
+      <h3>Impact &amp; verification</h3>
+      <p>How scores are calculated and actions get verified.</p>
+      <span class="count">11 articles</span>
+    </a>
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--sky-tint);color:var(--sky)"><svg class="ic" viewBox="0 0 24 24"><path d="M3 5h18v12H7l-4 4V5z"/></svg></div>
+      <h3>Posting &amp; the feed</h3>
+      <p>Compose, log actions, tag, and tune your feed tabs.</p>
+      <span class="count">9 articles</span>
+    </a>
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--sky-tint);color:var(--sky)"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 19c0-2 2-3.5 4-3.5"/></svg></div>
+      <h3>Communities &amp; challenges</h3>
+      <p>Join communities, take part, and earn Green Points.</p>
+      <span class="count">7 articles</span>
+    </a>
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--green-tint);color:var(--green)"><svg class="ic" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8a3 3 0 016 0"/></svg></div>
+      <h3>Marketplace &amp; carbon</h3>
+      <p>Shop sustainable goods and buy carbon credits.</p>
+      <span class="count">6 articles</span>
+    </a>
+    <a class="cat-card" href="#faq">
+      <div class="cat-ic" style="background:var(--bg-2);color:var(--ink-2)"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>
+      <h3>Account &amp; privacy</h3>
+      <p>Security, visibility, data export, and deletion.</p>
+      <span class="count">10 articles</span>
+    </a>
+  </div>
+
+  <!-- FAQ ACCORDION -->
+  <h2 class="sec" id="faq">Popular questions</h2>
+  <div class="acc">
+    <details open>
+      <summary><span class="ch"><svg class="ic sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="q">How is my impact score calculated?</span></summary>
+      <div class="a">Your 0–100 score reflects the environmental benefit, scalability, and community engagement of the actions you log. Verified actions count for more — see <a href="#">Impact &amp; verification</a> for the full breakdown.</div>
+    </details>
+    <details>
+      <summary><span class="ch"><svg class="ic sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="q">What are Green Points, Impact Tokens, and HONUA?</span></summary>
+      <div class="a"><strong>Green Points (GP)</strong> are earned for logged and verified actions and power levels and streaks. <strong>Impact Tokens (IT)</strong> are spent in the carbon market. <strong>HONUA</strong> is the governance token, earned at higher tiers.</div>
+    </details>
+    <details>
+      <summary><span class="ch"><svg class="ic sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="q">How do I reset my password?</span></summary>
+      <div class="a">On the sign-in screen, choose <strong>Forgot password?</strong> and we’ll email you a reset link. If it doesn’t arrive, check spam or <a href="Contact Support.html">contact support</a>.</div>
+    </details>
+    <details>
+      <summary><span class="ch"><svg class="ic sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="q">Can I delete a post after publishing?</span></summary>
+      <div class="a">Yes — open the post, use the “···” menu, and choose Delete. Verified-impact entries tied to the post stay on your ledger unless you remove them separately.</div>
+    </details>
+    <details>
+      <summary><span class="ch"><svg class="ic sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="q">Why aren’t my notifications working?</span></summary>
+      <div class="a">Check your in-app notification settings and your browser or device permissions. Still stuck? Our <a href="Contact Support.html">support team</a> can take a look.</div>
+    </details>
+  </div>
+
+  <!-- MINI CARDS -->
+  <h2 class="sec">Can’t find it?</h2>
+  <div class="mini-row">
+    <a class="mini" href="Contact Support.html">
+      <div class="mic" style="background:var(--green-tint);color:var(--green)"><svg class="ic" viewBox="0 0 24 24"><path d="M3 5h18v12H7l-4 4V5z"/></svg></div>
+      <div><h3>Contact support</h3><p>Email a human — replies in 24–48 hours.</p></div>
+    </a>
+    <a class="mini" href="Report a Problem.html">
+      <div class="mic" style="background:#faf0eb;color:var(--clay)"><svg class="ic" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+      <div><h3>Report a problem</h3><p>Flag content, a person, or a bug.</p></div>
+    </a>
+  </div>
+</main>
+
+<footer class="sup-footer">
+  <div class="inner">
+    <div class="foot-links">
+      <a href="Help Center.html">Help center</a>
+      <a href="Contact Support.html">Contact support</a>
+      <a href="Community Guidelines.html">Community guidelines</a>
+      <a href="Report a Problem.html">Report a problem</a>
+      <a href="Terms &amp; Privacy.html">Terms &amp; privacy</a>
+    </div>
+    <div class="foot-meta">© 2026 honua coop</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honua redesign · Start here</title>
+<link rel="stylesheet" href="../src/styles.css">
+<style>
+  body { margin: 0; min-height: 100vh; background:
+    radial-gradient(1100px 700px at 80% -5%, #ecf5ee 0%, transparent 55%),
+    var(--bg); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 72px clamp(24px, 5vw, 48px) 80px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+  .logo .mark { width: 34px; height: 34px; border-radius: 9px; background: var(--green); color: #fff; display: grid; place-items: center; font-family: 'Bricolage Grotesque'; font-weight: 700; font-size: 19px; letter-spacing: -0.05em; }
+  .logo .wm { font-family: 'Bricolage Grotesque'; font-weight: 600; font-size: 21px; }
+  .eyebrow { font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: .1em; color: var(--green); text-transform: uppercase; }
+  h1 { font-family: 'Bricolage Grotesque'; font-weight: 600; font-size: 54px; line-height: 1.04; letter-spacing: -0.035em; margin: 14px 0 0; max-width: 14ch; }
+  .lede { font-size: 18px; line-height: 1.6; color: var(--ink-3); max-width: 56ch; margin: 18px 0 0; text-wrap: pretty; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .tile { display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    padding: 26px; transition: transform .16s, box-shadow .16s, border-color .16s; min-height: 220px; }
+  .tile:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -22px rgba(0,0,0,.25); border-color: var(--line-2); }
+  .tile.big { grid-column: span 2; flex-direction: row; align-items: stretch; gap: 26px; }
+  .tile .pill { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: .03em; }
+  .pill.green { background: var(--green-tint); color: var(--green); }
+  .pill.sky { background: var(--sky-tint); color: var(--sky); }
+  .pill.ink { background: var(--bg-2); color: var(--ink-2); }
+  .tile h2 { font-family: 'Bricolage Grotesque'; font-weight: 600; font-size: 26px; letter-spacing: -0.02em; margin: 16px 0 6px; }
+  .tile p { font-size: 14.5px; line-height: 1.55; color: var(--ink-3); margin: 0; flex: 1; text-wrap: pretty; }
+  .tile .go { display: inline-flex; align-items: center; gap: 7px; margin-top: 18px; font-weight: 600; font-size: 14px; color: var(--green); }
+
+  .preview { flex: 0 0 300px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); position: relative; background: linear-gradient(135deg,#e6f0fa,#ecf5ee); }
+  .pv-chrome { height: 34px; background:#efeee8; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:6px; padding:0 12px; }
+  .pv-chrome i { width:8px;height:8px;border-radius:50%; }
+  .pv-body { padding: 16px; display:flex; gap:10px; }
+  .pv-side { width:60px; }
+  .pv-side b { display:block; height:9px; border-radius:3px; background:var(--green-tint); margin-bottom:7px; }
+  .pv-side b:first-child { background:var(--green); width:70%; }
+  .pv-main { flex:1; }
+  .pv-main b { display:block; height:11px; border-radius:4px; background:#fff; border:1px solid var(--line); margin-bottom:8px; }
+  .pv-main b.tall { height:60px; }
+
+  .meta { margin-top: 44px; display: flex; gap: 24px; flex-wrap: wrap; font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ink-4); }
+  .meta span strong { color: var(--ink-2); font-weight: 600; }
+
+  @media (max-width: 760px) {
+    h1 { font-size: 40px; }
+    .grid { grid-template-columns: 1fr; }
+    .tile.big { grid-column: span 1; flex-direction: column; }
+    .preview { flex: none; height: 150px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span class="mark">h</span><span class="wm">honua</span></div>
+  <p class="eyebrow" style="margin-top:28px">Redesign · May 2026</p>
+  <h1>The social network for people fixing the planet.</h1>
+  <p class="lede">A mass-market redesign of Honua. Start with a clickable prototype to feel the real flow, or read the full design documentation. Everything below opens in this tab.</p>
+
+  <div class="grid">
+    <a class="tile big" href="Desktop Prototype.html">
+      <div style="display:flex;flex-direction:column;flex:1">
+        <span class="pill green">▶ Clickable · Desktop</span>
+        <h2>Desktop prototype</h2>
+        <p>The full web app, merged into one navigable experience. Click through all 14 screens via the working sidebar — the URL bar and back/forward respond just like the real thing.</p>
+        <span class="go">Explore the app →</span>
+      </div>
+      <div class="preview">
+        <div class="pv-chrome"><i style="background:#ed6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i></div>
+        <div class="pv-body">
+          <div class="pv-side"><b></b><b></b><b></b><b></b><b></b></div>
+          <div class="pv-main"><b style="width:50%"></b><b class="tall"></b><b></b><b style="width:80%"></b><b class="tall"></b></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="tile" href="Mobile Prototype.html">
+      <span class="pill sky">▶ Clickable · Mobile</span>
+      <h2>Mobile prototype</h2>
+      <p>The phone app with a working tab bar and a jump-to-screen menu covering all 8 mobile screens — sign-in through messages.</p>
+      <span class="go">Open on phone →</span>
+    </a>
+
+    <a class="tile" href="Honua - Documentation.html">
+      <span class="pill ink">◆ Reference</span>
+      <h2>Design documentation</h2>
+      <p>Design system, information architecture, every screen, and the three new features. Printable to PDF.</p>
+      <span class="go">Read the docs →</span>
+    </a>
+  </div>
+
+  <a class="tile" href="Honua redesign.html" style="margin-top:16px;min-height:0;flex-direction:row;align-items:center;justify-content:space-between">
+    <div>
+      <span class="pill ink">⛶ Overview</span>
+      <h2 style="font-size:22px;margin:12px 0 4px">Design canvas</h2>
+      <p>All 25+ screens laid out side-by-side on a pannable board — the original exploration view.</p>
+    </div>
+    <span class="go" style="margin-top:0">Open canvas →</span>
+  </a>
+
+  <div class="meta">
+    <span><strong>15</strong> sections</span>
+    <span><strong>25+</strong> screens</span>
+    <span><strong>3</strong> new features</span>
+    <span><strong>Desktop</strong> + mobile</span>
+  </div>
+</div>
+</body>
+</html>

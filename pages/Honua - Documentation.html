@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honua redesign · Design documentation</title>
+<link rel="stylesheet" href="../src/styles.css">
+<style>
+  body { margin: 0; background: var(--bg); color: var(--ink); }
+  .doc {
+    box-sizing: border-box; max-width: 8.5in; margin: 0 auto;
+    background: var(--surface);
+    padding: 64px clamp(24px, 5vw, 0.9in) 110px;
+    box-shadow: 0 0 0 1px var(--line);
+  }
+  .doc-frame { width: 100%; border-collapse: collapse; }
+  .doc-frame td { padding: 0; }
+  .hdr-space, .ftr-space { display: none; }
+
+  /* type */
+  .doc h1, .doc h2, .doc h3, .doc h4 { font-family: 'Bricolage Grotesque','Geist',serif; letter-spacing: -0.02em; text-wrap: balance; }
+  .doc h1 { font-size: 44px; font-weight: 600; line-height: 1.05; margin: 0 0 8px; letter-spacing: -0.035em; }
+  .doc h2 { font-size: 26px; font-weight: 600; margin: 0 0 14px; }
+  .doc h3 { font-size: 18px; font-weight: 600; margin: 0 0 6px; }
+  .doc h4 { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+  .doc p, .doc li { font-size: 15px; line-height: 1.62; color: var(--ink-2); text-wrap: pretty; }
+  .doc strong { color: var(--ink); font-weight: 600; }
+  .mono { font-family: 'Geist Mono', monospace; }
+  .eyebrow { font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: .08em; color: var(--green); text-transform: uppercase; margin: 0 0 10px; }
+  a { color: var(--green); }
+
+  /* section rhythm */
+  section { margin: 0 0 18px; padding-top: 30px; border-top: 1px solid var(--line); }
+  section.lead { border-top: none; padding-top: 0; }
+  .sec-num { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ink-4); letter-spacing: .05em; display: block; margin-bottom: 6px; }
+
+  .lede { font-size: 18px; line-height: 1.6; color: var(--ink-2); }
+
+  /* layout helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card.tint { background: var(--green-tint); border-color: transparent; }
+  .card h4 { margin-bottom: 6px; }
+  .card p { font-size: 13.5px; margin: 0; }
+
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .kpi .v { font-family: 'Bricolage Grotesque'; font-size: 30px; font-weight: 600; letter-spacing: -0.03em; }
+  .kpi .v small { font-size: 14px; color: var(--ink-3); font-weight: 500; }
+  .kpi .l { font-family: 'Geist Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: .05em; text-transform: uppercase; }
+
+  /* swatch */
+  .swatches { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
+  .sw { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .sw .chip-c { height: 46px; }
+  .sw .meta { padding: 6px 8px; }
+  .sw .meta .n { font-size: 11px; font-weight: 600; }
+  .sw .meta .h { font-size: 9px; font-family: 'Geist Mono',monospace; color: var(--ink-3); }
+
+  /* type specimen */
+  .specimen { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .specimen .row { padding: 12px 0; border-top: 1px solid var(--line); }
+  .specimen .row:first-child { border-top: none; padding-top: 0; }
+  .specimen .tag { font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--ink-3); letter-spacing: .05em; }
+
+  /* spec table */
+  table.spec { width: 100%; border-collapse: collapse; margin: 6px 0 2px; }
+  table.spec th, table.spec td { text-align: left; padding: 9px 10px; font-size: 13.5px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.spec th { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .04em; color: var(--ink-3); text-transform: uppercase; font-weight: 500; }
+  table.spec td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  table.spec .mono { color: var(--ink-2); }
+
+  ul.clean { margin: 8px 0; padding-left: 18px; }
+  ul.clean li { margin-bottom: 5px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; font-family: 'Geist Mono',monospace; }
+  .pill.new { background: var(--ink); color: #fff; }
+  .pill.green { background: var(--green-tint); color: var(--green); }
+  .pill.sky { background: var(--sky-tint); color: var(--sky); }
+
+  .feature { border-radius: 18px; padding: 22px; color: #fff; margin-bottom: 12px; }
+  .feature .t { font-family: 'Bricolage Grotesque'; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  .feature p { color: rgba(255,255,255,.82); font-size: 14px; margin: 0 0 14px; }
+  .feature ul { margin: 0; padding-left: 18px; }
+  .feature li { color: rgba(255,255,255,.9); font-size: 13.5px; margin-bottom: 5px; }
+
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 8px; }
+  .toolbar a {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    padding: 11px 18px; border-radius: 12px; font-weight: 600; font-size: 14px;
+    background: var(--ink); color: #fff; border: 1px solid var(--ink);
+  }
+  .toolbar a.ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+
+  .callout { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 13.5px; }
+  .callout .mono { color: var(--green); }
+
+  .map-row { display: grid; grid-template-columns: 150px 1fr; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line); align-items: baseline; }
+  .map-row:first-child { border-top: none; }
+  .map-row .k { font-weight: 600; font-size: 14px; }
+  .map-row .k .mono { display: block; font-size: 11px; color: var(--ink-3); font-weight: 400; margin-top: 2px; }
+  .map-row .d { font-size: 13.5px; color: var(--ink-2); }
+
+  @page { size: letter; margin: 0; }
+  @media print {
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html, body { margin: 0; padding: 0; background: #fff; }
+    .doc { max-width: none !important; margin: 0 !important; padding: 0 0.7in !important; box-shadow: none !important; background: #fff; }
+    .hdr-space, .ftr-space { display: table-cell; height: 0.7in; }
+    h1, h2, h3, h4 { break-after: avoid; }
+    section, .card, .kpi, .feature, .specimen, figure, table, tr, .map-row { break-inside: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    .screen-only { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="doc">
+<table class="doc-frame" role="presentation">
+<thead><tr><td class="hdr-space"></td></tr></thead>
+<tbody><tr><td>
+
+<section class="lead">
+  <p class="eyebrow">Honua · Redesign · May 2026</p>
+  <h1>Honua design documentation</h1>
+  <p class="lede">Honua is the social network for people fixing the planet — familiar feed-and-follow mechanics with a sustainability soul baked into every post, profile, and interaction. This document covers the design system, information architecture, every screen, and the three new features that anchor the redesign.</p>
+
+  <div class="toolbar screen-only">
+    <a href="Desktop Prototype.html">▶ Open desktop prototype</a>
+    <a class="ghost" href="Mobile Prototype.html">▶ Open mobile prototype</a>
+    <a class="ghost" href="Honua redesign.html">⛶ Open design canvas</a>
+  </div>
+
+  <div class="grid-4" style="margin-top:18px">
+    <div class="kpi"><div class="v">15</div><div class="l">Sections</div></div>
+    <div class="kpi"><div class="v">25+</div><div class="l">Screens</div></div>
+    <div class="kpi"><div class="v">3</div><div class="l">New features</div></div>
+    <div class="kpi"><div class="v">2</div><div class="l">Platforms</div></div>
+  </div>
+</section>
+
+<!-- 01 — VISION -->
+<section>
+  <span class="sec-num">01</span>
+  <h2>Vision &amp; goals</h2>
+  <p>The previous Honua skewed niche and tool-like. The redesign keeps the values but adopts the conventions people already know from mainstream social apps, so a first-time user is never confused about how to post, follow, or browse. The sustainability layer is what makes it different — never what makes it harder.</p>
+  <div class="grid-2" style="margin-top:12px">
+    <div class="card"><h4>Familiar by default</h4><p>Feed, follow, compose, profile, DMs, notifications — the patterns are conventional so adoption is frictionless.</p></div>
+    <div class="card"><h4>Impact, made visible</h4><p>Every post and person carries a measurable, verified impact signal. Good action is legible, not vague.</p></div>
+    <div class="card"><h4>From scrolling to doing</h4><p>The feed routes people to real-world action — local projects, challenges, and offsets — not just more content.</p></div>
+    <div class="card"><h4>Trust through verification</h4><p>Oracle- and third-party-verified impact and on-chain carbon traceability separate Honua from greenwashing.</p></div>
+  </div>
+</section>
+
+<!-- 02 — DESIGN SYSTEM -->
+<section>
+  <span class="sec-num">02</span>
+  <h2>Design system</h2>
+  <p>The vocabulary every screen is built from. The system favours calm, earthy neutrals with one confident green, mono type for all data, and generous radii.</p>
+
+  <h3 style="margin-top:18px">Typography</h3>
+  <div class="specimen">
+    <div class="row">
+      <div class="font-display" style="font-size:40px;font-weight:600;letter-spacing:-0.03em;line-height:1">Bricolage Grotesque</div>
+      <div class="tag" style="margin-top:6px">DISPLAY · HEADLINES · 26–56 PX · WEIGHT 600</div>
+    </div>
+    <div class="row">
+      <div style="font-family:'Geist';font-size:20px;font-weight:500">Geist — Regular · Medium · Semibold</div>
+      <div class="tag" style="margin-top:6px">BODY &amp; UI · 12–18 PX · WEIGHT 400–600</div>
+    </div>
+    <div class="row">
+      <div class="mono" style="font-size:16px">12.4k · −1.8 kg CO₂ · 92 impact · +24 GP</div>
+      <div class="tag" style="margin-top:6px">DATA · LABELS · TAGS · TIMESTAMPS</div>
+    </div>
+  </div>
+  <p style="margin-top:10px"><strong>Rule of thumb:</strong> if it's a number, a metric, a handle, or a system label, it's set in <span class="mono">Geist Mono</span>. This makes data feel native rather than decorative, and it is the single most recognisable trait of the brand.</p>
+
+  <h3 style="margin-top:18px">Colour</h3>
+  <div class="swatches">
+    <div class="sw"><div class="chip-c" style="background:#1f6f3f"></div><div class="meta"><div class="n">Green</div><div class="h">#1F6F3F</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#2e9a5b"></div><div class="meta"><div class="n">Green-2</div><div class="h">#2E9A5B</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#c8e6cf"></div><div class="meta"><div class="n">Tint</div><div class="h">#C8E6CF</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#1d6dc4"></div><div class="meta"><div class="n">Sky</div><div class="h">#1D6DC4</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#e6b450"></div><div class="meta"><div class="n">Sun</div><div class="h">#E6B450</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#c4623a"></div><div class="meta"><div class="n">Clay</div><div class="h">#C4623A</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#0a0d0b"></div><div class="meta"><div class="n">Ink</div><div class="h">#0A0D0B</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#5c635e"></div><div class="meta"><div class="n">Ink-3</div><div class="h">#5C635E</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#e8e7e1"></div><div class="meta"><div class="n">Line</div><div class="h">#E8E7E1</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#f4f3ee"></div><div class="meta"><div class="n">Bg-2</div><div class="h">#F4F3EE</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#fafaf7"></div><div class="meta"><div class="n">Bg</div><div class="h">#FAFAF7</div></div></div>
+    <div class="sw"><div class="chip-c" style="background:#ffffff"></div><div class="meta"><div class="n">Surface</div><div class="h">#FFFFFF</div></div></div>
+  </div>
+  <p style="margin-top:10px"><strong>Green</strong> is the single brand colour, used sparingly for action and identity. <strong>Sky</strong> signals verification and data. <strong>Sun</strong> marks streaks and warmth; <strong>Clay</strong> is reserved for fire/streak iconography and destructive actions. Everything else is a warm near-neutral. A full dark theme is defined on the same tokens.</p>
+
+  <h3 style="margin-top:18px">Core components</h3>
+  <table class="spec">
+    <thead><tr><th>Component</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Score pill</td><td class="mono">Sustainability score (0–100) on every post &amp; person — green ≥ 80, mid ≥ 50, sun below.</td></tr>
+      <tr><td>Verified-impact badge</td><td class="mono">Sky pill marking oracle / third-party verified figures (e.g. “verified · 1.4t CO₂”).</td></tr>
+      <tr><td>Avatar</td><td class="mono">Round avatar with optional blue verified check or numeric impact-score chip.</td></tr>
+      <tr><td>Buttons</td><td class="mono">Primary (ink → green on hover), Green (solid), Ghost (hairline). Pill radius.</td></tr>
+      <tr><td>Chips</td><td class="mono">Neutral, green, and sky variants for tags, filters, and categories.</td></tr>
+      <tr><td>Pill-nav</td><td class="mono">Inset segmented control for in-page tabs (For you / Following / …).</td></tr>
+      <tr><td>KPI card</td><td class="mono">Metric tile with mono label, display-font value, coloured icon, and delta.</td></tr>
+      <tr><td>Toggle</td><td class="mono">Settings switch, green when on.</td></tr>
+      <tr><td>Image placeholder</td><td class="mono">Striped fill + mono caption marking where real photography drops in.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:18px">Shape, spacing &amp; icons</h3>
+  <div class="grid-2">
+    <div class="card"><h4>Radii</h4><p class="mono" style="color:var(--ink-2)">xs 6 · sm 10 · md 14 · lg 20 · xl 28 · pills 999</p></div>
+    <div class="card"><h4>Iconography</h4><p>One lucide-style line set, 1.75 stroke (2+ when active). Never decorative — icons label or act.</p></div>
+  </div>
+
+  <h3 style="margin-top:18px">Voice</h3>
+  <ul class="clean">
+    <li><strong>Specific over vague.</strong> “20 panels, −80% footprint” beats “made my home greener”.</li>
+    <li><strong>Numbers in mono.</strong> Data reads as fact, not flourish.</li>
+    <li><strong>Action verbs, present tense.</strong> “Compost food scraps”, not “Try composting”.</li>
+  </ul>
+</section>
+
+<!-- 03 — IA -->
+<section>
+  <span class="sec-num">03</span>
+  <h2>Information architecture</h2>
+  <p>Desktop uses a persistent left sidebar (13 destinations) with a contextual right rail. Mobile uses a 5-tab bottom bar with the compose action centred and elevated; deeper screens are reached contextually.</p>
+
+  <div class="grid-2" style="margin-top:6px">
+    <div class="card">
+      <h4>Desktop · sidebar</h4>
+      <p class="mono" style="color:var(--ink-2);line-height:1.9">Home · Explore · Impact · Action map · Carbon market · Marketplace · Bookmarks · Notifications · Messages · Communities · Challenges · Profile · Settings</p>
+    </div>
+    <div class="card">
+      <h4>Mobile · bottom nav</h4>
+      <p class="mono" style="color:var(--ink-2);line-height:1.9">Home · Explore · <strong style="color:var(--green)">＋ Compose</strong> · Impact · Profile</p>
+      <p style="margin-top:8px;font-size:13px">Compose is the raised centre action. Activity, Messages, Sign-in, and Onboarding are reached from top bars and entry flows.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:18px">URL map (desktop)</h3>
+  <table class="spec">
+    <thead><tr><th>Screen</th><th>Route</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td class="mono">honua.green</td></tr>
+      <tr><td>Explore</td><td class="mono">/explore</td></tr>
+      <tr><td>Impact dashboard</td><td class="mono">/impact</td></tr>
+      <tr><td>Action map</td><td class="mono">/map</td></tr>
+      <tr><td>Carbon market</td><td class="mono">/carbon</td></tr>
+      <tr><td>Marketplace</td><td class="mono">/shop</td></tr>
+      <tr><td>Profile</td><td class="mono">/@sarahgreen</td></tr>
+      <tr><td>Post detail</td><td class="mono">/p/1287</td></tr>
+      <tr><td>Communities</td><td class="mono">/c/urban-gardeners</td></tr>
+      <tr><td>Challenges</td><td class="mono">/challenges</td></tr>
+      <tr><td>Messages / Activity / Bookmarks / Settings</td><td class="mono">/messages · /activity · /bookmarks · /settings</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 04 — SCREENS -->
+<section>
+  <span class="sec-num">04</span>
+  <h2>Screens</h2>
+
+  <h3>Desktop</h3>
+  <div class="map-row"><div class="k">Home feed<span class="mono">/</span></div><div class="d">Three-column feed: nav, composer + challenge ribbon + posts (For you / Following / Verified impact tabs), and a right rail with search, your impact card, trending, and suggested follows.</div></div>
+  <div class="map-row"><div class="k">Explore<span class="mono">/explore</span></div><div class="d">Editorial hero story, category browser, communities you might love, and an action-map preview that hands off to the full map.</div></div>
+  <div class="map-row"><div class="k">Post detail<span class="mono">/p/…</span></div><div class="d">Expanded post with the verified-impact breakdown (CO₂, energy, $ saved), a comment thread, and an “about this project” rail.</div></div>
+  <div class="map-row"><div class="k">Profile<span class="mono">/@…</span></div><div class="d">Cover, identity with verified check &amp; level, bio/stats, a lifetime verified-impact card, tabbed content, achievements, and projects led.</div></div>
+  <div class="map-row"><div class="k">Marketplace<span class="mono">/shop</span></div><div class="d">Sustainable goods, each with an impact label and a human review. Featured drop banner, filters, product grid.</div></div>
+  <div class="map-row"><div class="k">Messages<span class="mono">/messages</span></div><div class="d">Conversation list + chat, with presence, attachments, and verified senders.</div></div>
+  <div class="map-row"><div class="k">Notifications<span class="mono">/activity</span></div><div class="d">Grouped activity — verified-impact events get their own type — with a preferences rail.</div></div>
+  <div class="map-row"><div class="k">Communities<span class="mono">/c/…</span></div><div class="d">Forum-style community with post kinds (tip, question, win, meetup), voting, pinned resources, and events.</div></div>
+  <div class="map-row"><div class="k">Challenges<span class="mono">/challenges</span></div><div class="d">Today’s logged tasks, active challenges with progress, and a browsable challenge catalogue.</div></div>
+  <div class="map-row"><div class="k">Bookmarks &amp; Settings</div><div class="d">Saved collections; and account / impact-wallet / security settings with the rewards balances.</div></div>
+
+  <h3 style="margin-top:20px">Mobile</h3>
+  <div class="map-row"><div class="k">Sign in</div><div class="d">Hero illustration + email/social/wallet sign-in (Google, Apple, Celo wallet).</div></div>
+  <div class="map-row"><div class="k">Onboarding</div><div class="d">5-step interest picker that shapes the feed and suggests nearby projects.</div></div>
+  <div class="map-row"><div class="k">Home feed</div><div class="d">Streak/stories rail, tab pill, challenge ribbon, dense post cards.</div></div>
+  <div class="map-row"><div class="k">Compose</div><div class="d">Post composer with “log as a verified action” — estimates impact and points before you post.</div></div>
+  <div class="map-row"><div class="k">Impact</div><div class="d">Monthly CO₂ headline, streak card, KPI grid, 30-day ledger, recent actions.</div></div>
+  <div class="map-row"><div class="k">Profile</div><div class="d">Gradient header, verified identity, lifetime impact card, tabbed posts.</div></div>
+  <div class="map-row"><div class="k">Activity &amp; Messages</div><div class="d">Notification stream with impact events; 1:1 chat with attachments and presence.</div></div>
+</section>
+
+<!-- 05 — NEW FEATURES -->
+<section>
+  <span class="sec-num">05</span>
+  <h2>New features</h2>
+  <p>Three flagship additions, plus the cross-cutting impact layer that ties the whole product together.</p>
+
+  <div class="feature" style="background:linear-gradient(135deg,#1f6f3f,#2e9a5b)">
+    <span class="pill" style="background:rgba(255,255,255,.18);color:#fff">NEW · 01</span>
+    <div class="t">Personal impact dashboard</div>
+    <p>Your environmental footprint as a living ledger — finally visible, measurable, and motivating.</p>
+    <ul>
+      <li>KPI cards: CO₂ avoided, trees funded, water saved, energy cut — each with month-over-month deltas.</li>
+      <li>30-day CO₂ ledger chart, stacked by category (transport, energy, food, other).</li>
+      <li>Streaks &amp; levels: daily streak with a 30-day 2× multiplier; XP levels (e.g. “Level 7 · Composter”).</li>
+      <li>Verified actions list and a neighbourhood ranking leaderboard.</li>
+    </ul>
+  </div>
+
+  <div class="feature" style="background:linear-gradient(135deg,#1d6dc4,#3a8fd9)">
+    <span class="pill" style="background:rgba(255,255,255,.18);color:#fff">NEW · 02</span>
+    <div class="t">Local action map</div>
+    <p>Turns intent into attendance. Find a cleanup, garden, repair café, or co-op near you this weekend.</p>
+    <ul>
+      <li>Split view: filterable project list beside an interactive map with category pins.</li>
+      <li>Filters by type (cleanup, garden, energy, repair, policy, waste) and search by host or tag.</li>
+      <li>Per-project attendance (“84 going”), host, and schedule; “Start a project” entry point.</li>
+      <li>Area-impact summary aggregating hours, waste removed, and trees planted nearby.</li>
+    </ul>
+  </div>
+
+  <div class="feature" style="background:linear-gradient(135deg,#0a0d0b,#2a2f2c)">
+    <span class="pill" style="background:rgba(255,255,255,.18);color:#fff">NEW · 03</span>
+    <div class="t">Carbon credit marketplace</div>
+    <p>Offset what you can’t avoid — every credit on-chain verified, third-party audited, and traceable to a real project.</p>
+    <ul>
+      <li>Live market: spot price, 24h volume, projects listed, your yearly offsets.</li>
+      <li>Credit table with type, region, verifier (Verra, Gold Standard, Puro.Earth…), vintage, price, and availability.</li>
+      <li>“Subscribe &amp; forget” auto-offset that matches your tracked footprint monthly.</li>
+      <li>Optional soulbound impact NFT minting your year on-chain.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:20px">The impact layer (cross-cutting)</h3>
+  <p>Three primitives appear everywhere and make Honua feel different from a generic social app:</p>
+  <div class="grid-3">
+    <div class="card tint"><h4>Sustainability score</h4><p>A 0–100 signal on every post and person; verified actions raise it. Surfaced as the score pill.</p></div>
+    <div class="card tint"><h4>Verified impact</h4><p>Oracle- and third-party-checked figures wear a sky badge, so claims are trustworthy.</p></div>
+    <div class="card tint"><h4>Rewards economy</h4><p>Green Points (GP) from actions, Impact Tokens (IT) for the carbon market, and Honua governance.</p></div>
+  </div>
+  <div class="callout">
+    <strong>Rewards reference.</strong>
+    <span class="mono">GP</span> — earned per logged/verified action (e.g. bike commute <span class="mono">+24 GP</span>, renewable plan <span class="mono">+200 GP</span>); fuels levels &amp; streaks.
+    <span class="mono">IT</span> — Impact Tokens spent in the carbon market.
+    <span class="mono">HONUA</span> — governance token, earned at higher tiers.
+  </div>
+</section>
+
+<!-- 06 — INTERACTIVITY -->
+<section>
+  <span class="sec-num">06</span>
+  <h2>Interactivity &amp; flows</h2>
+  <p>The desktop prototype is fully interactive: every primary control resolves to a real navigation, modal, or state change. Three global systems power this — a router with parameters, a modal layer, and a toast layer — backed by persistent state in <span class="mono">localStorage</span> (likes, saves, follows, joined communities &amp; challenges, cart, wishlist, drafts, and theme survive reload).</p>
+
+  <h3 style="margin-top:18px">Global systems</h3>
+  <table class="spec">
+    <thead><tr><th>System</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>Navigation</td><td class="mono">Clicking a post, person, project, article, or notification routes to the right screen with params (e.g. post id, profile handle). Back/forward and reload preserve position.</td></tr>
+      <tr><td>Modals</td><td class="mono">Detail &amp; action overlays — post compose, product, carbon credit/buy, project, article reader, challenge, discussion, tip, wallet, badge, celebration, edit profile, create challenge/project, new collection, export, delete-account. Esc / backdrop closes.</td></tr>
+      <tr><td>Toasts</td><td class="mono">Transient confirmations bottom-centre — success (post published, saved, joined) and error (offline → saved to drafts) with optional undo / view-drafts actions.</td></tr>
+      <tr><td>Optimistic state</td><td class="mono">Like, save/bookmark, follow, RSVP, join, and cart counts update instantly and persist.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:18px">Key flows</h3>
+  <div class="map-row"><div class="k">Compose &amp; drafts</div><div class="d">New-post (sidebar or composer) opens the composer; publishing shows a success toast. Toggling “simulate offline” saves to <span class="mono">drafts</span> and raises an error toast with a recovery action.</div></div>
+  <div class="map-row"><div class="k">Post engagement</div><div class="d">Cards open the detail screen; like / repost / bookmark / share and threaded replies all work, with author follow and clickable avatars to profiles.</div></div>
+  <div class="map-row"><div class="k">Home tabs</div><div class="d">For you / Following / Verified impact filter the feed (Following keys off who you follow; Verified shows oracle-verified posts) with empty states.</div></div>
+  <div class="map-row"><div class="k">Carbon market</div><div class="d">Category pills filter the table; rows &amp; Buy open the credit modal with a quantity-priced purchase that ends in a celebration. Wallet, Offset-my-year, and Auto-offset each open dedicated modals.</div></div>
+  <div class="map-row"><div class="k">Action map</div><div class="d">List rows and map pins open the project sheet (RSVP, message host, share); “Start a project” opens a creation form.</div></div>
+  <div class="map-row"><div class="k">Marketplace</div><div class="d">Products open a detail modal with quantity + add-to-cart; wishlist and cart are live counts; Wishlist/Cart buttons open their contents.</div></div>
+  <div class="map-row"><div class="k">Notifications</div><div class="d">Each notification routes to its target — likes/comments → the post, follow → the profile, project → the map, streak → challenges + a celebration, badge/level → profile + a badge modal.</div></div>
+  <div class="map-row"><div class="k">Communities</div><div class="d">About and Join/Leave (with undo), “I’m going” RSVP, and discussion threads all resolve; the cover now sits behind the avatar &amp; name.</div></div>
+  <div class="map-row"><div class="k">Challenges</div><div class="d">Create challenge, Log today (celebration), and Join/Leave with a per-challenge detail modal.</div></div>
+  <div class="map-row"><div class="k">Profile</div><div class="d">Your own profile shows Edit (opens an editor) &amp; Share; other people show Message, Tip, and Follow. Achievements open badge detail.</div></div>
+  <div class="map-row"><div class="k">Settings</div><div class="d">All nine sections switch in place. Delete account is a two-step confirm — warning, then type-to-confirm “delete my account”. Appearance toggles a real dark theme.</div></div>
+</section>
+
+<!-- 07 — PROTOTYPES -->
+<section>
+  <span class="sec-num">07</span>
+  <h2>Using the prototypes</h2>
+  <p>Two clickable prototypes merge the screens into navigable apps so you can feel the real flow before build.</p>
+  <div class="grid-2">
+    <div class="card">
+      <h4><span class="pill green">Desktop</span></h4>
+      <p style="margin-top:8px">Full-window app with browser chrome. Click any sidebar item to move between all 14 screens; the URL bar updates and back/forward work. Your last screen is remembered on reload.</p>
+    </div>
+    <div class="card">
+      <h4><span class="pill sky">Mobile</span></h4>
+      <p style="margin-top:8px">Phone shell that scales to fit. The bottom tab bar navigates the core screens; the floating compass button opens a “jump to screen” menu covering all 8 screens, including sign-in and onboarding.</p>
+    </div>
+  </div>
+  <div class="toolbar screen-only">
+    <a href="Desktop Prototype.html">▶ Open desktop prototype</a>
+    <a class="ghost" href="Mobile Prototype.html">▶ Open mobile prototype</a>
+    <a class="ghost" href="Honua redesign.html">⛶ Open design canvas</a>
+  </div>
+</section>
+
+</td></tr></tbody>
+<tfoot><tr><td class="ftr-space"></td></tr></tfoot>
+</table>
+</main>
+</body>
+</html>

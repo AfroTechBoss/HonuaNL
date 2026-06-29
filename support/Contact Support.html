@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact support · honua</title>
+<link rel="stylesheet" href="../src/styles.css">
+<link rel="stylesheet" href="support.css">
+</head>
+<body>
+
+<header class="sup-header">
+  <a class="sup-logo" href="../pages/Honua - Start here.html">
+    <span class="mark">h</span><span class="wm">honua</span><span class="tag">help</span>
+  </a>
+  <nav class="sup-nav">
+    <a href="Help Center.html">Help center</a>
+    <a href="Community Guidelines.html" class="hide-sm">Guidelines</a>
+    <a href="Contact Support.html" class="active hide-sm">Contact</a>
+    <a href="Terms &amp; Privacy.html" class="hide-sm">Terms &amp; privacy</a>
+    <a class="sup-back" href="../pages/Desktop Prototype.html">← Back to app</a>
+  </nav>
+</header>
+
+<main class="sup-wrap">
+  <section class="hero">
+    <p class="eyebrow">Contact support</p>
+    <h1>Talk to a human.</h1>
+    <p class="lede">Tell us what’s going on and we’ll get back to you by email. The more detail you give, the faster we can help.</p>
+  </section>
+
+  <div class="cols">
+    <div class="panel">
+      <form id="contactForm">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input class="inp" id="name" type="text" placeholder="Sarah Green" required>
+        </div>
+        <div class="field">
+          <label for="email">Email <span class="hint">— where we’ll reply</span></label>
+          <input class="inp" id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="topic">What’s this about?</label>
+          <select class="sel" id="topic">
+            <option>General question</option>
+            <option>Account &amp; sign-in</option>
+            <option>Impact &amp; verification</option>
+            <option>Marketplace or carbon credits</option>
+            <option>Billing &amp; rewards</option>
+            <option>Something’s broken (bug)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">How can we help?</label>
+          <textarea class="ta" id="msg" placeholder="Describe the issue, what you expected, and anything you’ve already tried…" required></textarea>
+        </div>
+        <button class="submit" type="submit">
+          <svg class="ic sm" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          Send message
+        </button>
+      </form>
+      <div class="success" id="ok">
+        <div class="ring"><svg class="ic" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></div>
+        <h3>Message sent</h3>
+        <p>Thanks — we’ve got it. You’ll hear back at the email you gave, usually within 24–48 hours. (This is a prototype, so nothing was actually sent.)</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="aside-card">
+        <h3>Other ways to reach us</h3>
+        <div class="kv"><span class="k">Email</span> support@honua.green</div>
+        <div class="kv"><span class="k">Forums</span> Help &amp; Support category</div>
+        <div class="kv"><span class="k">In-app</span> Report a problem</div>
+      </div>
+      <div class="aside-card">
+        <h3>Typical response times</h3>
+        <div class="kv"><span class="k">General</span> 24–48 hours</div>
+        <div class="kv"><span class="k">Technical</span> 12–24 hours</div>
+        <div class="kv"><span class="k">Security</span> within 4 hours</div>
+      </div>
+      <div class="aside-card">
+        <h3>Speed things up</h3>
+        <ul class="rules" style="margin-top:6px">
+          <li><span class="b ok"><svg class="ic sm" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></span>Your username</li>
+          <li><span class="b ok"><svg class="ic sm" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></span>What you expected to happen</li>
+          <li><span class="b ok"><svg class="ic sm" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></span>Steps you’ve already tried</li>
+          <li><span class="b ok"><svg class="ic sm" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M4 12l5 5L20 6"/></svg></span>Screenshots, device &amp; browser</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="sup-footer">
+  <div class="inner">
+    <div class="foot-links">
+      <a href="Help Center.html">Help center</a>
+      <a href="Contact Support.html">Contact support</a>
+      <a href="Community Guidelines.html">Community guidelines</a>
+      <a href="Report a Problem.html">Report a problem</a>
+      <a href="Terms &amp; Privacy.html">Terms &amp; privacy</a>
+    </div>
+    <div class="foot-meta">© 2026 honua coop</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!this.checkValidity()) { this.reportValidity(); return; }
+    this.style.display = 'none';
+    document.getElementById('ok').classList.add('show');
+  });
+</script>
+
+</body>
+</html>
